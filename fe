@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+. ~/bin/lib/my_zsh_lib
+
+[[ -z "$1" ]] && error_exit "usage: $0 <filename> [<dir>]"
+
+DIR=${2:-.}
+files=`find $DIR -name "*$1*"`
+
+${EDITOR:-vim} ${=files}

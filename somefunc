@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+while getopts 'abc:de:f:' opt; do
+    case $opt in
+        (a) echo 'option: -a';;
+        (b) echo 'option: -b';;
+        (c) echo 'option: -c, arg: '$OPTARG;;
+        (d) echo 'option: -d';;
+        (e) echo 'option: -e, arg: '$OPTARG;;
+        (f) echo 'option: -f, arg: '$OPTARG;;
+    esac
+done
+
+shift $(( OPTIND - 1 ))
+echo 'remain: '$@

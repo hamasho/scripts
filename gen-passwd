@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+. ~/bin/lib/my_zsh_lib
+
+usage() {
+    cat << EOF
+usage: gen-passwd [-m] <service-name>
+
+options:
+    -m : use notations '!@#$%^&*' for password
+EOF
+    exit 1
+}
+
+error_exit() {
+    echo "error: $1" >&2
+    echo ''
+    usage
+    exit 1
+}
+
+while getopts ':l' opt; do
+    case $opt in
+        (l) use_notations=y;;
+        (*) error_exit "invalid argument: ${OPTARG}";;
+    esac
+done
+shift $((OPTIND - 1))
+
+[[ -z $1 ]] && error_exit "must supply <master-passwd> and <service-name>"
+passwd=$(echo $(getsecret master_passwd)$1 | md5sum | head -c 10)
+echo $passwd

@@ -1,0 +1,24 @@
+#!/bin/zsh
+
+services () {
+    running=()
+    pgrep apache >/dev/null && running+=(apache)
+    pgrep mysql >/dev/null && running+=(mariadb)
+    pgrep docker >/dev/null && running+=(docker)
+    echo -n "RUNNING: "
+    if [[ -n "$running" ]]; then
+        echo "$running"
+    else
+        echo "no service"
+    fi
+}
+
+columns=168         # length of title bar (when full screen)
+
+rtitle="TODO: learn apache, php, swift, and much more..."
+
+ltitle="[ $(date '+%Y/%m/%d %a %H:%M') ]"
+ltitle="[ $(uptime|grep -o 'up [^,]*') ] $ltitle"
+ltitle="[ $(services) ] $ltitle"
+
+printf "%-60s %116s" "$rtitle" "$ltitle"

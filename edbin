@@ -1,0 +1,25 @@
+#!/bin/zsh
+
+. ~/bin/lib/my_zsh_lib
+
+[[ -z "$1" ]] && error_exit "usage: $0 <script_name>"
+
+file=`find ~/bin -name $1`
+template='#!/bin/zsh
+
+. ~/bin/lib/my_zsh_lib
+
+'
+
+if [[ -z $file ]]; then
+    file='~/bin/$1'
+    echo "$template" > $file
+    chmod +x $file
+    ${EDITOR:-vim} $file
+else
+    ${EDITOR:-vim} $file
+fi
+
+if echo $template | diff $file - >/dev/null; then
+    rm $file
+fi
