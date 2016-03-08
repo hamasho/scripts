@@ -4,7 +4,7 @@
 
 [[ -z "$1" ]] && error_exit "usage: $0 <script_name>"
 
-file=`find ~/bin -name $1`
+file=`find -L ~/bin -name $1`
 template='#!/bin/zsh
 
 . ~/bin/lib/my_zsh_lib
@@ -12,7 +12,7 @@ template='#!/bin/zsh
 '
 
 if [[ -z $file ]]; then
-    file='~/bin/$1'
+    file="$HOME/bin/$1"
     echo "$template" > $file
     chmod +x $file
     ${EDITOR:-vim} $file
