@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+. ~/bin/lib/my_zsh_lib
+
+[[ "$#" -lt 1 ]] && error_exit 'usage: aps <package name>'
+result=$(apt-cache search -n $1)
+if [[ -n $result ]]; then
+    echo $result | \less -XF
+    echo
+    echo "- install '${1}' => just press <return>"
+    echo "- install specific package => enter name"
+    echo "- not install => enter 'quit' or <ctrl-c>"
+    echo -n "aps> "
+    read package
+    if [[ -z $package ]]; then
+        package=$1
+    elif [[ $package == quit ]]; then
+        exit 0
+    fi
+    sudo apt-get install -y $package
+fi
