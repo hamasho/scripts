@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+from urllib.request import urlopen
+from urllib.error import HTTPError
+from bs4 import BeautifulSoup
+import sys
+
+
+def getTranslation(word):
+    url = 'http://dictionary.cambridge.org/us/dictionary/english/' + word
+    try:
+        html = urlopen(url)
+    except HTTPError:
+        print("error: HTTPError")
+        return None
+    try:
+        bs = BeautifulSoup(html, "lxml")
+        allTags = bs.findAll('', {'data-tab': 'ds-american-english'})
+        if len(allTags) == 0:
+            allTags = bs.findAll('', {'data-tab': 'ds-british'})
+        result = []
+        for tag in allTags:
+            defBlocks = tag.findAll('div', {'class': 'def-block'})
+            for defBlock in defBlocks:
+                meaning = defBlock.find('b', {'class': 'def'}).getText()
+                example = defBlock.find('span', {'title': 'Example'})
+                if example is not None:
+                    example = example.getText()
+                result.append({
+                    'meaning': meaning,
+                    'example': example,
+                })
+    except AttributeError:
+        print("error: AttributeError")
+        return None
+
+    if len(result) == 0:
+        return None
+    else:
+        return result
+
+
+if len(sys.argv) == 1:
+    print("usage: " + sys.argv[0] + " <word>")
+else:
+    word = sys.argv[1]
+    definitions = getTranslation(word)
+    if definitions is None:
+        print("No such word: " + word)
+    else:
+        for definition in definitions:
+            print(definition['meaning'])
+            if definition['example'] is not None:
+                print('> ' + definition['example'])
+            if definition != definitions[-1]:
+                print()

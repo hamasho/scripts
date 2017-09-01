@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+tmux splitw -h -p 30
+tmux splitw -p 30
+tmux selectp -t 1

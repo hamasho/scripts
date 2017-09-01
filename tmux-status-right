@@ -1,8 +1,12 @@
 #!/bin/zsh
 
-fg_color=colour230
-bg_color=colour245
-space_bg_color=colour240
+# For light color
+# fg_color=colour014
+# bg_color=colour007
+# For dark color
+fg_color=colour000
+bg_color=colour008
+space_bg_color=$bg_color
 
 mydate() {
     date '+%Y/%m/%d %a %H:%M'
